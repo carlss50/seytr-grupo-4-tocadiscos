@@ -1,0 +1,15 @@
+# Archivos de compilación
+*.spec
+*.exe
+*.bin
+*.elf
+*.hex
+
+# Carpetas temporales
+/build/
+/bin/
+/dist/
+
+# Archivos de usuario/sistema
+.DS_Store
+Thumbs.db
