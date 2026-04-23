@@ -1,4 +1,3 @@
-CÓDIGO 4 SENSORES:
 const int Trig[] = {9, 7, 5, 3}; 
 const int Echo[] = {8, 6, 4, 2}; 
 
