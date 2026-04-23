@@ -2,11 +2,11 @@
 
 #define ALTURA_MAXIMA 15
 // Rango de lectura de la ficha baja
-#define BAJA_MIN 3
-#define BAJA_MAX 4.5
+#define BAJA_MIN 11.5
+#define BAJA_MAX 13
 // Rango de lectura de la ficha alta
-#define ALTA_MIN 6
-#define ALTA_MAX 7.5
+#define ALTA_MIN 5.5
+#define ALTA_MAX 10
 
 const int Trig[] = {2, 4, 6, A0}; 
 const int Echo[] = {3, 5, 7, A1}; 
@@ -24,16 +24,32 @@ void setup() {
   Serial.println("--- ESPERANDO FICHAS ---");
 }
 
-int medirDistancia(int i){
-  digitalWrite(Trig[i], LOW);
-  delayMicroseconds(2);
-  digitalWrite(Trig[i], HIGH);
-  delayMicroseconds(10);
-  digitalWrite(Trig[i], LOW);
+int medirDistancia(int i) {
+  long sumaDistancias = 0;
+  int muestras = 3; // Vamos a tomar 3 muestras
 
-  long tiempo = pulseIn(Echo[i], HIGH, 20000);
-  if (tiempo == 0) return 999;
-  return tiempo * 0.034 / 2;
+  for (int m = 0; m < muestras; m++) {
+    digitalWrite(Trig[i], LOW);
+    delayMicroseconds(2);
+    digitalWrite(Trig[i], HIGH);
+    delayMicroseconds(10);
+    digitalWrite(Trig[i], LOW);
+
+    // El timeout de 20000ms es suficiente para unos 3 metros
+    long tiempo = pulseIn(Echo[i], HIGH, 20000); 
+    
+    int d;
+    if (tiempo == 0) {
+      d = 999; // Si falla, le asignamos un valor de "vacío"
+    } else {
+      d = tiempo * 0.034 / 2;
+    }
+    
+    sumaDistancias += d;
+    delay(5); // Pequeña pausa entre disparos del mismo sensor
+  }
+
+  return sumaDistancias / muestras; // Devolvemos la media
 }
 
 void loop() {
