@@ -9,6 +9,10 @@
 #define ALTA_MIN 5.5
 #define ALTA_MAX 10
 
+//Control de lecturas erróneas
+#define UMBRAL_CONFIRMACION 4
+int lecturas_vacias[] = {0, 0, 0, 0};
+
 const int Trig[] = {2, 4, 6, A0}; 
 const int Echo[] = {3, 5, 7, A1}; 
 
@@ -66,6 +70,7 @@ void loop() {
     int distancia = medirDistancia(i);
     
     if (distancia >= BAJA_MIN && distancia <= BAJA_MAX){
+      lecturas_vacias[i] = 0;
       if (estadoSensor[i] != 1){
         int notaATocar = (i * 2) + 1;
         Serial.print("Sensor "); Serial.print(i+1);
@@ -75,6 +80,7 @@ void loop() {
         delay(10);
       }
     }else if (distancia >= ALTA_MIN && distancia <= ALTA_MAX){
+      lecturas_vacias[i] = 0;
       if (estadoSensor[i] != 2){
         int notaATocar = (i * 2) + 2;
         Serial.print("Sensor "); Serial.print(i+1);
@@ -85,8 +91,11 @@ void loop() {
       }
     }else if (distancia > ALTURA_MAXIMA) {
       if (estadoSensor[i] != 0) {
-        Serial.println("Estado: Vacío");
-        estadoSensor[i] = 0;
+        lecturas_vacias[i]++;
+        if (lecturas_vacias[i] >= UMBRAL_CONFIRMACION){
+          Serial.println("Estado: Vacío");
+          estadoSensor[i] = 0;
+        }
       }
     }
   }
