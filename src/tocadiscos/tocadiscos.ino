@@ -1,4 +1,5 @@
 #include <DFRobotDFPlayerMini.h>
+#include <SoftwareSerial.h>
 
 #define ALTURA_MAXIMA 15
 // Rango de lectura de la ficha baja
@@ -14,14 +15,25 @@ const int Echo[] = {3, 5, 7, A1};
 //0 para vacío, 1 para ficha baja, 2 para ficha alta
 int estadoSensor[] = {0, 0, 0, 0};
 
+DFRobotDFPlayerMini reproductor;
+SoftwareSerial puertoMP3(12, 13);
 
 void setup() {
   Serial.begin(115200);
+  puertoMP3.begin(9600);
+
+  delay(1000); 
+  if (reproductor.begin(puertoMP3)) {
+    Serial.println("DFPlayer OK");
+    reproductor.volume(20);
+  } else {
+    Serial.println("DFPlayer no encontrado - Comprobando sensores...");
+  }
+
   for (int i = 0; i < 4; i++) {
     pinMode(Trig[i], OUTPUT);
     pinMode(Echo[i], INPUT);
   }
-  Serial.println("--- ESPERANDO FICHAS ---");
 }
 
 int medirDistancia(int i) {
@@ -35,21 +47,18 @@ int medirDistancia(int i) {
     delayMicroseconds(10);
     digitalWrite(Trig[i], LOW);
 
-    // El timeout de 20000ms es suficiente para unos 3 metros
     long tiempo = pulseIn(Echo[i], HIGH, 20000); 
     
     int d;
     if (tiempo == 0) {
-      d = 999; // Si falla, le asignamos un valor de "vacío"
+      d = 999;
     } else {
       d = tiempo * 0.034 / 2;
     }
-    
     sumaDistancias += d;
-    delay(5); // Pequeña pausa entre disparos del mismo sensor
+    delay(5);
   }
-
-  return sumaDistancias / muestras; // Devolvemos la media
+  return sumaDistancias / muestras;
 }
 
 void loop() {
@@ -62,6 +71,8 @@ void loop() {
         Serial.print("Sensor "); Serial.print(i+1);
         Serial.print(" - Nota detectada: "); Serial.println(notaATocar);
         estadoSensor[i] = 1;
+        reproductor.play(notaATocar);
+        delay(10);
       }
     }else if (distancia >= ALTA_MIN && distancia <= ALTA_MAX){
       if (estadoSensor[i] != 2){
@@ -69,6 +80,8 @@ void loop() {
         Serial.print("Sensor "); Serial.print(i+1);
         Serial.print(" - Nota detectada: "); Serial.println(notaATocar);
         estadoSensor[i] = 2;
+        reproductor.play(notaATocar);
+        delay(10);
       }
     }else if (distancia > ALTURA_MAXIMA) {
       if (estadoSensor[i] != 0) {
