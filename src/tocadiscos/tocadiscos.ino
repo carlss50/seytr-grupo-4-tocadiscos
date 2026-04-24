@@ -1,13 +1,13 @@
 #include <DFRobotDFPlayerMini.h>
 #include <SoftwareSerial.h>
 
-#define ALTURA_MAXIMA 15
+#define ALTURA_MAXIMA 13
 // Rango de lectura de la ficha baja
-#define BAJA_MIN 11.5
-#define BAJA_MAX 13
+#define BAJA_MIN 9.5
+#define BAJA_MAX 11
 // Rango de lectura de la ficha alta
-#define ALTA_MIN 5.5
-#define ALTA_MAX 10
+#define ALTA_MIN 3.5
+#define ALTA_MAX 8
 
 //Control de lecturas erróneas
 #define UMBRAL_CONFIRMACION 4
