@@ -6,7 +6,7 @@
 #define BAJA_MAX 11.5
 #define ALTA_MIN 3.0
 #define ALTA_MAX 8.5
-#define UMBRAL_CONFIRMACION 3 // lecturas para confirmar la ficha
+#define UMBRAL_CONFIRMACION 2 // lecturas para confirmar la ficha
 
 // pines para sensores ultrasónicos
 const int Trig[] = {2, 4, 6, A0};
@@ -41,10 +41,9 @@ void setup() {
   }
 }
 
-
 float medirDistancia(int i) {
   long sumaDistancias = 0;
-  int muestras = 3; //Cantidad de mediciones para validad la ficha 
+  int muestras = 2; //Cantidad de mediciones para validad la ficha 
   int validas = 0;
 
   for (int m = 0; m < muestras; m++) {
@@ -54,18 +53,14 @@ float medirDistancia(int i) {
     delayMicroseconds(10);
     digitalWrite(Trig[i], LOW);
 
-    long tiempo = pulseIn(Echo[i], HIGH, 25000); // Timeout de 25ms para evitar bloqueos largos
+    long tiempo = pulseIn(Echo[i], HIGH, 20000); // Timeout de 25ms para evitar bloqueos largos
     if (tiempo > 0) {
       sumaDistancias += tiempo;
       validas++;
     }
     delay(3);
+    
   }
-
-  if (validas == 0) return 999.0;
-  
-  return (suma / validas) * 0.034 / 2.0;
-}
 
 
 int clasificarDistancia(float distancia) {
@@ -73,7 +68,7 @@ int clasificarDistancia(float distancia) {
 
   if (distancia >= ALTA_MIN && distancia <= ALTA_MAX) return 2; // ficha alta
 
-  if (distancia > ALTURA_MAXIMA)                      return 0; // vacío
+  if (distancia > ALTURA_MAXIMA) return 0; // vacío
 
   return -1; // error
 }
@@ -104,16 +99,18 @@ void loop() {
       contadorCandidato[i] = 0;
 
       //Calculo del sensor
-      int notaATocar = (i * 2) + lecturaActual; 
-      Serial.print("Sensor "); 
-      Serial.print(i + 1);
-      Serial.print(" - Nota detectada: "); 
-      Serial.print(notaATocar);
-      
-      // suena nota en el DFplayer
-      reproductor.play(notaATocar);
-      delay(10); 
+      if(lecturaActual != 0){
+        int notaATocar = (i * 2) + lecturaActual; 
+        Serial.print("Sensor "); 
+        Serial.print(i + 1);
+        Serial.print(" - Nota detectada: "); 
+        Serial.print(notaATocar);
+        
+        // suena nota en el DFplayer
+        reproductor.play(notaATocar);
+        delay(10); 
+      }
     }
   }
-  delay(20);
+  //delay(20); //SIN PAUSA
 }
