@@ -59,6 +59,10 @@ Por esta razón, se optó por utilizar dos Arduinos independientes. De esta mane
 ![Sensor y altavoz](images/mapa-conexiones-sensoresyaltavoz.png)
 No hemos conseguido encontrar una página web que tuviera los componentes concretos, por lo que el altavoz está representado con un buzzer y el dfPlayer mini con un lector de tarjetas microSD.
 
+### Pines de Conexión del motor:
+![Sensor y altavoz](images/mapa-conexiones-motor.png)
+Tampoco hemos encontrado los componentes para el motor. El controlador que usamos realmente es el ULN2003.
+
 ---
 
 ## 💻 Instalación y Uso
