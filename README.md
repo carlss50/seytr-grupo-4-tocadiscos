@@ -56,7 +56,7 @@ Por esta razón, se optó por utilizar dos Arduinos independientes. De esta mane
 
 
 ### Pines de Conexión de los sensores y el altavoz:
-![Sensor y altavoz](mapa-conexiones-sensoresyaltavoz.png)
+![Sensor y altavoz](images/mapa-conexiones-sensoresyaltavoz.png)
 
 
 ---
