@@ -55,7 +55,8 @@ Por esta razón, se optó por utilizar dos Arduinos independientes. De esta mane
 ## 🔌 Esquema de Conexiones
 
 
-### Pines de Conexión:
+### Pines de Conexión de los sensores y el altavoz:
+![Sensor y altavoz]()
 
 
 ---
