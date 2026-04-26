@@ -57,7 +57,7 @@ Por esta razón, se optó por utilizar dos Arduinos independientes. De esta mane
 
 ### Pines de Conexión de los sensores y el altavoz:
 ![Sensor y altavoz](images/mapa-conexiones-sensoresyaltavoz.png)
-
+No hemos conseguido encontrar una página web que tuviera los componentes concretos, por lo que el altavoz está representado con un buzzer y el dfPlayer mini con un lector de tarjetas microSD.
 
 ---
 
